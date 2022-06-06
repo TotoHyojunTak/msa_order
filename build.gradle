@@ -36,7 +36,7 @@ dependencies {
     // Dto 등 객체간 자동 변환을 위해서 사용함
     implementation 'org.modelmapper:modelmapper:3.1.0'
 
-    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 }
 
 dependencyManagement {
