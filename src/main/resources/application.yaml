@@ -1,4 +1,11 @@
 server:
+  #shutdown: graceful
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+  tomcat:
+    uri-encoding: UTF-8
   port: 0
 
 spring:

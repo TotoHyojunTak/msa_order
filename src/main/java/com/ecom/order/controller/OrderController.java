@@ -2,6 +2,7 @@ package com.ecom.order.controller;
 
 import com.ecom.order.dto.OrderDto;
 import com.ecom.order.jpa.OrderEntity;
+import com.ecom.order.messagequeue.KafkaProducer;
 import com.ecom.order.service.OrderService;
 import com.ecom.order.vo.RequestOrder;
 import com.ecom.order.vo.ResponseOrder;
@@ -24,11 +25,13 @@ public class OrderController {
 
     Environment env;
     OrderService orderService;
+    KafkaProducer kafkaProducer;
 
     @Autowired
-    public OrderController(Environment env, OrderService orderService) {
+    public OrderController(Environment env, OrderService orderService, KafkaProducer kafkaProducer) {
         this.env = env;
         this.orderService = orderService;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @GetMapping("/health_check")
@@ -50,15 +53,15 @@ public class OrderController {
         OrderDto createdOrder = orderService.createOrder(orderDto);
         ResponseOrder responseOrder = mapper.map(createdOrder, ResponseOrder.class);
 
-        /* kafka */
-//        orderDto.setOrderId(UUID.randomUUID().toString());
-//        orderDto.setTotalPrice(orderDetails.getQty() * orderDetails.getUnitPrice());
+        /* kafka - start */
+        //orderDto.setOrderId(UUID.randomUUID().toString());
+        //orderDto.setTotalPrice(orderDetails.getQty() * orderDetails.getUnitPrice());
 
         /* send this order to the kafka */
-//        kafkaProducer.send("example-catalog-topic", orderDto);
-//        orderProducer.send("orders", orderDto);
-
-//        ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
+        kafkaProducer.send("example-catalog-topic", orderDto);
+        //orderProducer.send("orders", orderDto);
+        //ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
+        /* kafka - end */
 
         log.info("After added orders data");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
